@@ -1,30 +1,32 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="flex">
+    <Sidebar />
+    <div
+      class="w-screen h-screen bg-body text-white  pt-12 px-12 md:px-24 xl:px-48"
+    >
+      <router-view />
+    </div>
   </div>
-  <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import Sidebar from "@/components/Sidebar.vue";
 
-#nav {
-  padding: 30px;
-}
+import { useStore } from "vuex";
+import { computed } from "vue";
+export default {
+  name: "App",
+  components: { Sidebar },
+  setup() {
+    const store = useStore();
+    const isDiscovering = computed(() => store.state.bulbs.discovering);
+    const discover = () => {
+      store.dispatch("bulbs/discovery");
+    };
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    if (isDiscovering.value === false) {
+      discover();
+    }
+  },
+};
+</script>
