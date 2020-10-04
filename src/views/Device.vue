@@ -1,6 +1,6 @@
 <template>
-  <main v-if="device">
-    <div class="flex justify-between">
+  <main class="h-full" v-if="device">
+    <div class="flex items-center justify-between">
       <div>
         <div class="flex items-center ">
           <h1 class="mr-2">{{ device.name }}</h1>
@@ -10,8 +10,9 @@
           >{{ device.power ? "On" : "Off" }} • {{ device.bright }}% Brightness
         </span>
       </div>
-      <power-toggle :device="[device]" />
+      <power-toggle :device="[device]" bg="toolbar" />
     </div>
+    <div class="w-full min-h-1/2 bg-toolbar">Color</div>
   </main>
 </template>
 

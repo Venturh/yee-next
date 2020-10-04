@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex items-center w-12 h-6 rounded-full bg-body"
+    class="flex items-center w-12 h-6 rounded-full"
+    :class="`bg-${bg}`"
     @click="setActive"
   >
     <span
@@ -15,14 +16,15 @@ import { defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
-  props: { device: Object },
+  props: { device: Object, bg: { type: String, default: "body" } },
   setup(props) {
     const store = useStore();
     const active = ref(props.device[0].power);
 
+    console.log("bg", props.bg);
+
     const setActive = () => {
       active.value = !active.value;
-      console.log("setActive -> active.value", active.value, props.device);
       store.dispatch("bulbs/setPower", {
         bulbs: props.device,
         power: active.value,

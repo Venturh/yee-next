@@ -28,7 +28,6 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const favoriteDevices = computed(() => store.state.dashboard.devices);
-    console.log("setup -> favoriteDevices", favoriteDevices);
     return { favoriteDevices };
   },
 });

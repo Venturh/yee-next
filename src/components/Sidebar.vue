@@ -19,7 +19,7 @@
         icon="arrow-push-left"
         v-if="expanded"
         @click="setExpanded"
-        class="inline-block w-6 h-6 text-white fill-current"
+        class="inline-block w-6 h-6 text-white"
       />
     </div>
 
@@ -29,14 +29,20 @@
         :to="`/${item.text.toLowerCase()}`"
         :key="item.text"
         @click="setSelected(item.text)"
-        class="bottom-0 flex items-center w-10/12 p-2 my-4 rounded-lg cursor-pointer  last:absolute"
+        class="relative bottom-0 flex items-center w-full p-2 my-4 rounded-lg cursor-pointer j last:absolute"
         :class="[
-          selected === item.text ? 'bg-body ' : '',
+          selected === item.text ? 'text-primary ' : 'text-white',
           expanded ? '' : 'justify-center',
         ]"
       >
-        <Icon class="fill-current text-primary" :icon="item.icon" />
-        <p class="ml-2 text-lg text-white" v-if="expanded">{{ item.text }}</p>
+        <div class="flex ml-4">
+          <Icon :icon="item.icon" :size="6" />
+          <p class="ml-2 text-lg" v-if="expanded">{{ item.text }}</p>
+        </div>
+        <span
+          class="absolute right-0 w-1 h-6 rounded-xl bg-primary"
+          v-if="selected === item.text"
+        />
       </router-link>
     </div>
   </div>

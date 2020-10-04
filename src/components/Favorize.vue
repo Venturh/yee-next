@@ -10,10 +10,10 @@
       class=" text-primary"
       :icon="
         hover
-          ? favorite
+          ? !favorite
             ? 'heart-fill'
             : 'heart-stroke'
-          : !favorite
+          : favorite
           ? 'heart-fill'
           : 'heart-stroke'
       "
