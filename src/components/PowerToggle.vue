@@ -21,8 +21,6 @@ export default defineComponent({
     const store = useStore();
     const active = ref(props.device[0].power);
 
-    console.log("bg", props.bg);
-
     const setActive = () => {
       active.value = !active.value;
       store.dispatch("bulbs/setPower", {

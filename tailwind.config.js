@@ -15,6 +15,8 @@ module.exports = {
       borderRadius: { xl: "1rem" },
       inset: {
         "2": "2em",
+        "20%": "22.5%",
+        "50%": "50.0%",
       },
       screens: {
         xxl: "1920px",

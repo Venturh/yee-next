@@ -28,6 +28,8 @@ const actions = {
   }, 200),
 
   setBright: _.debounce(function({ state }, { bulbs, bright }) {
+    console.log("bright", bright);
+    console.log("bulbs", bulbs);
     state.loading = true;
     bulbs.forEach(bulb => {
       bulb.setBright(parseInt(bright), 300);

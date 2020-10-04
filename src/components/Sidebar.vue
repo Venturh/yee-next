@@ -36,13 +36,13 @@
         ]"
       >
         <div class="flex ml-4">
+          <span
+            class="absolute left-0 w-1 h-6 rounded-xl bg-primary"
+            v-if="selected === item.text"
+          />
           <Icon :icon="item.icon" :size="6" />
           <p class="ml-2 text-lg" v-if="expanded">{{ item.text }}</p>
         </div>
-        <span
-          class="absolute right-0 w-1 h-6 rounded-xl bg-primary"
-          v-if="selected === item.text"
-        />
       </router-link>
     </div>
   </div>
@@ -55,6 +55,7 @@ import Icon from "@/components/Icon.vue";
 type MenuItem = {
   text: string;
   icon: string;
+  dropdown: boolean;
 };
 
 export default defineComponent({
@@ -65,19 +66,23 @@ export default defineComponent({
       {
         text: "Dashboard",
         icon: "home",
+        dropdown: false,
       },
       {
         text: "Devices",
         icon: "home",
+        dropdown: true,
       },
-      { text: "Rooms", icon: "rooms" },
+      { text: "Rooms", icon: "rooms", dropdown: true },
       {
         text: "Scenes",
         icon: "scenes",
+        dropdown: false,
       },
       {
         text: "Settings",
         icon: "settings",
+        dropdown: false,
       },
     ];
 

@@ -1,6 +1,7 @@
+//Todo: make it dynamic with other component
 <template>
   <input
-    class="z-10 w-full bg-gray-400 outline-none"
+    class="outline-none b-gray-400 "
     :style="{ '--size': size, '--r': color.r, '--g': color.g, '--b': color.b }"
     type="range"
     v-model="brightness"
@@ -25,7 +26,7 @@ export default defineComponent({
     const setBrightness = () => {
       store.dispatch("bulbs/setBright", {
         bulbs: props.device,
-        bright: brightness.value,
+        bright: props.device[0].bright.value,
       });
     };
 
@@ -43,14 +44,14 @@ export default defineComponent({
 <style scoped>
 input[type="range"] {
   appearance: none;
-
+  transform: rotateZ(270deg);
   @apply bg-body;
   border-radius: 1em;
   overflow: hidden;
 }
 input[type="range"]::-webkit-slider-thumb {
-  height: var(--size);
-  width: var(--size);
+  height: 0;
+  width: 0;
   -webkit-appearance: none;
   appearance: none;
   box-shadow: calc(var(--size) * -13) 0 0 calc(var(--size) * 12.5)

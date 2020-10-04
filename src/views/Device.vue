@@ -12,7 +12,12 @@
       </div>
       <power-toggle :device="[device]" bg="toolbar" />
     </div>
-    <div class="w-full min-h-1/2 bg-toolbar">Color</div>
+    <div class="flex justify-between w-full mt-6 space-x-4 min-h-1/2 ">
+      <detail-card class="w-1/2" :navItems="['Color', 'ColorTemp']" />
+
+      <detail-card class="w-1/2" :navItems="['Scenes']" />
+    </div>
+    <brightness-slider :device="[device]" :color="device.rgb" />
   </main>
 </template>
 
@@ -23,10 +28,13 @@ import { computed } from "vue";
 
 import Favorize from "@/components/Favorize.vue";
 import PowerToggle from "@/components/PowerToggle.vue";
+import DetailCard from "@/components/DetailCard.vue";
+import BrightnessSlider from "@/components/BrightnessSlider.vue";
 import { Device } from "@/types";
 import { setFavoriteStorage } from "@/services/bulb";
+
 export default {
-  components: { Favorize, PowerToggle },
+  components: { Favorize, PowerToggle, DetailCard, BrightnessSlider },
   setup() {
     const router = useRouter();
     const { params } = useRoute();
