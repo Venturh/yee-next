@@ -2,7 +2,7 @@
   <div class="flex">
     <Sidebar />
     <div
-      class="w-screen h-screen bg-body text-white  pt-12 px-12 md:px-24 xl:px-48"
+      class="w-screen h-screen px-12 pt-12 text-white bg-body md:px-12 xl:px-24 xxl:px-48"
     >
       <router-view />
     </div>
@@ -20,6 +20,7 @@ export default {
   setup() {
     const store = useStore();
     const isDiscovering = computed(() => store.state.bulbs.discovering);
+
     const discover = () => {
       store.dispatch("bulbs/discovery");
     };
@@ -27,6 +28,7 @@ export default {
     if (isDiscovering.value === false) {
       discover();
     }
+    return {};
   },
 };
 </script>

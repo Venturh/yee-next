@@ -19,6 +19,9 @@ module.exports = {
       screens: {
         xxl: "1920px",
       },
+      transitionProperty: {
+        width: "width",
+      },
     },
   },
   variants: {

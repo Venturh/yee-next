@@ -1,7 +1,7 @@
 <template>
   <div
     v-html="require(`../assets/icons/${icon}.svg`)"
-    class=" h-6 w-6 inline-block "
+    :class="`inline-block  fill-current h-${size} w-${size}`"
   />
 </template>
 
@@ -13,6 +13,10 @@ export default defineComponent({
     icon: {
       type: String,
       required: true,
+    },
+    size: {
+      type: Number,
+      default: 6,
     },
   },
 });

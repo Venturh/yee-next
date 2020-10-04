@@ -12,3 +12,21 @@ export const onChange = (devices: any, newDevice: any) => {
   newState[index] = newDevice;
   return newState;
 };
+
+export const setFavoriteStorage = (device: any, type: string) => {
+  const json = localStorage.getItem(type) || "[]";
+  const storage: any = JSON.parse(json);
+  if (storage.length === 0) {
+    storage.push(device);
+    localStorage.setItem(type, JSON.stringify(storage));
+    return storage;
+  }
+  const index = storage.findIndex(savedDevice => savedDevice.id === device.id);
+  if (index === -1) {
+    storage.push(device);
+  } else {
+    storage.splice(index, 1);
+  }
+  localStorage.setItem(type, JSON.stringify(storage));
+  return storage;
+};

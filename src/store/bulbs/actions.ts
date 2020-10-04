@@ -5,6 +5,7 @@ import { onChange } from "@/services/bulb";
 const actions = {
   async discovery({ state, dispatch }: any) {
     state.discovering = true;
+    state.loading = true;
     const look = new Lookup();
     look.on("detected", device => {
       state.devices.push(device);
@@ -12,18 +13,18 @@ const actions = {
     });
   },
 
-  setListeners({ state }: any, device: any) {
+  setListeners({ state, dispatch }: any, device: any) {
+    dispatch("dashboard/getDevices", null, { root: true });
+    state.loading = false;
     device.on("stateUpdate", device => {
       state.devices = onChange(state.devices, device);
     });
   },
 
   setPower: _.debounce(function({ state }, { bulbs, power }) {
-    state.loading = true;
     bulbs.forEach(bulb => {
       bulb.setPower(power);
     });
-    state.loading = false;
   }, 200),
 
   setBright: _.debounce(function({ state }, { bulbs, bright }) {

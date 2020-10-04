@@ -1,10 +1,10 @@
 <template>
   <div
-    class="relative bg-accent h-screen"
+    class="relative h-screen bg-accent"
     :class="[expanded ? 'w-64' : 'w-16']"
   >
     <div
-      class="flex  mt-4"
+      class="flex mt-4"
       :class="[expanded ? 'justify-between px-2' : 'justify-center']"
     >
       <p class="text-white" v-if="expanded">Welcome</p>
@@ -12,31 +12,31 @@
         icon="arrow-push-right"
         v-if="!expanded"
         @click="setExpanded"
-        class="fill-current text-white inline-block w-6 h-6"
+        class="inline-block w-6 h-6 text-white fill-current"
       />
 
       <Icon
         icon="arrow-push-left"
         v-if="expanded"
         @click="setExpanded"
-        class="fill-current text-white inline-block w-6 h-6"
+        class="inline-block w-6 h-6 text-white fill-current"
       />
     </div>
 
-    <div class="w-full flex flex-col items-center  ">
+    <div class="flex flex-col items-center w-full ">
       <router-link
         v-for="item in menuItems"
         :to="`/${item.text.toLowerCase()}`"
         :key="item.text"
         @click="setSelected(item.text)"
-        class=" flex items-center  my-4 p-2 w-10/12 rounded-lg cursor-pointer last:absolute bottom-0"
+        class="bottom-0 flex items-center w-10/12 p-2 my-4 rounded-lg cursor-pointer  last:absolute"
         :class="[
           selected === item.text ? 'bg-body ' : '',
           expanded ? '' : 'justify-center',
         ]"
       >
-        <Icon class="text-primary fill-current" :icon="item.icon" />
-        <p class="text-white text-lg ml-2" v-if="expanded">{{ item.text }}</p>
+        <Icon class="fill-current text-primary" :icon="item.icon" />
+        <p class="ml-2 text-lg text-white" v-if="expanded">{{ item.text }}</p>
       </router-link>
     </div>
   </div>

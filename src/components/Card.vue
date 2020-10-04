@@ -1,28 +1,31 @@
 <template>
-  <div class="bg-toolbar rounded-xl p-4 ">
-    <div class="flex items-center justify-between mb-4 min-h-1/2 flex-grow-0">
+  <div
+    @click.self="linkToDevice"
+    :to="'/device/' + loadedBulbs[0].id"
+    class="p-4 bg-toolbar rounded-xl "
+  >
+    <div class="flex items-center justify-between flex-grow-0 mb-4 min-h-1/2">
       <div class="flex items-center">
-        <span class="w-6 h-6 bg-primary rounded-full flex-shrink-0" />
-        <span class="text-lg ml-4  ">{{
+        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary" />
+        <span class="ml-4 text-lg ">{{
           loadedBulbs[0].name || "Unnamed Device"
         }}</span>
       </div>
-      <toggle-button @action="setPower" :power="loadedBulbs[0].power" />
+      <power-toggle :device="loadedBulbs" />
     </div>
-    <verticle-slider
+    <brightness-slider
       class="w-full"
       :color="loadedBulbs[0].rgb"
-      @action="setBright"
-      :bright="loadedBulbs[0].bright"
+      :device="loadedBulbs"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { useStore } from "vuex";
-import ToggleButton from "./ToggleButton.vue";
-import VerticleSlider from "./VerticleSlider.vue";
+import PowerToggle from "./PowerToggle.vue";
+import BrightnessSlider from "./BrightnessSlider.vue";
+import { useRouter } from "vue-router";
 
 type Bulb = {
   id: string;
@@ -38,25 +41,16 @@ export default defineComponent({
   props: {
     bulbs: { type: Array as PropType<Bulb[]>, required: true },
   },
-  components: { ToggleButton, VerticleSlider },
+  components: { PowerToggle, BrightnessSlider },
   setup(props) {
-    const store = useStore();
+    const router = useRouter();
     const loadedBulbs = computed(() => props.bulbs);
 
-    const setPower = ({ value }) => {
-      store.dispatch("bulbs/setPower", {
-        bulbs: loadedBulbs.value,
-        power: value,
-      });
-    };
-    const setBright = value => {
-      store.dispatch("bulbs/setBright", {
-        bulbs: loadedBulbs.value,
-        bright: value.value,
-      });
+    const linkToDevice = () => {
+      router.push("/device/" + loadedBulbs.value[0].id);
     };
 
-    return { setPower, loadedBulbs, setBright };
+    return { loadedBulbs, linkToDevice };
   },
 });
 </script>

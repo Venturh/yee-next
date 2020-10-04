@@ -1,36 +1,42 @@
 <template>
   <input
-    class="bg-gray-400 w-full outline-none"
+    class="z-10 w-full bg-gray-400 outline-none"
     :style="{ '--size': size, '--r': color.r, '--g': color.g, '--b': color.b }"
     type="range"
-    v-model="values"
-    @input="setValues"
+    v-model="brightness"
+    @input="setBrightness"
   />
 </template>
 
 <script>
 import { defineComponent, ref, watch } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   props: {
+    device: Object,
     bright: Number,
     color: Object,
     size: { type: String, default: "1.75em" },
   },
 
-  setup(props, { emit }) {
-    const values = ref(props.bright);
-    const setValues = () => {
-      emit("action", values);
+  setup(props) {
+    const store = useStore();
+    const brightness = ref(props.bright);
+    const setBrightness = () => {
+      store.dispatch("bulbs/setBright", {
+        bulbs: props.device,
+        bright: brightness.value,
+      });
     };
 
     watch(
-      () => props.bright,
+      () => props.device[0].bright,
       value => {
-        values.value = value;
+        brightness.value = value;
       }
     );
-    return { values, setValues };
+    return { brightness, setBrightness };
   },
 });
 </script>
