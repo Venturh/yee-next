@@ -1,6 +1,6 @@
 <template>
-  <main class="h-full" v-if="device">
-    <div class="flex items-center justify-between">
+  <main class="w-full h-full " v-if="!loading">
+    <div class="flex items-center justify-between ">
       <div>
         <div class="flex items-center ">
           <h1 class="mr-2">{{ device.name }}</h1>
@@ -12,37 +12,79 @@
       </div>
       <power-toggle :device="[device]" bg="toolbar" />
     </div>
-    <div class="flex justify-between w-full mt-6 space-x-4 min-h-1/2 ">
-      <detail-card class="w-1/2" :navItems="['Color', 'ColorTemp']" />
+    <div
+      class="flex flex-col space-y-6 xxl:h-3/4 xxl:flex-row xxl:justify-between xxl:space-x-4 xxl:space-y-0 "
+    >
+      <detail-card class="xxl:w-1/2" :navItems="['Color', 'ColorTemp']">
+        <template v-slot:first>
+          <color-picker
+            @action="setColor"
+            colorType="rgb"
+            type="Wheel"
+            :value="color"
+          />
+        </template>
+        <template v-slot:second>
+          <color-picker
+            @action="setCt"
+            name="second"
+            colorType="kelvin"
+            :sliderShape="true"
+            type="Slider"
+            v-model="device.kelvin"
+          />
+        </template>
+      </detail-card>
 
-      <detail-card class="w-1/2" :navItems="['Scenes']" />
+      <detail-card class="xxl:w-1/2" :navItems="['Scenes']">
+        <template v-slot:first>
+          <h1>Scenes</h1>
+        </template>
+      </detail-card>
     </div>
-    <brightness-slider :device="[device]" :color="device.rgb" />
+    <brightness-slider-2
+      class="w-1/2"
+      size="2.5rem"
+      :device="[device]"
+      :color="device.rgb"
+    />
   </main>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { useRoute, useRouter } from "vue-router";
-import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { computed, Ref, ref, watch } from "vue";
 
 import Favorize from "@/components/Favorize.vue";
 import PowerToggle from "@/components/PowerToggle.vue";
 import DetailCard from "@/components/DetailCard.vue";
-import BrightnessSlider from "@/components/BrightnessSlider.vue";
+import ColorPicker from "@/components/ColorPicker.vue";
+import BrightnessSlider2 from "@/components/BrightnessSlider2.vue";
 import { Device } from "@/types";
 import { setFavoriteStorage } from "@/services/bulb";
 
 export default {
-  components: { Favorize, PowerToggle, DetailCard, BrightnessSlider },
+  components: {
+    Favorize,
+    PowerToggle,
+    DetailCard,
+    ColorPicker,
+    BrightnessSlider2,
+  },
   setup() {
-    const router = useRouter();
     const { params } = useRoute();
     const store = useStore();
     const { id } = params;
+
     const devices = computed(() => store.state.bulbs.devices);
     const favDevices = computed(() => store.state.dashboard.devices);
-    const device: Device = devices.value.find(device => device.id === id);
+    const device: Ref<Device> = ref(
+      devices.value.find(device => device.id === id) || {}
+    );
+    const loading = computed(() => store.state.bulbs.loading);
+
+    const color = ref(device.value.rgb || {});
     const isFavorite =
       favDevices.value.findIndex(device => device.id === id) !== -1;
 
@@ -52,9 +94,25 @@ export default {
         setFavoriteStorage(device, "favDevices")
       );
     };
-    //temp fix for stuff
-    if (device === undefined) router.push("/");
-    return { device, setFavorite, isFavorite };
+
+    const setColor = newColor => {
+      color.value = newColor;
+      store.dispatch("bulbs/setRgb", { bulbs: [device.value], rgb: newColor });
+    };
+
+    const setCt = ct => {
+      console.log("setup -> ct", ct);
+      store.dispatch("bulbs/setRgb", { bulbs: [device.value], rgb: ct });
+    };
+
+    watch(loading, () => {
+      device.value = devices.value[0];
+
+      color.value = device.value.rgb;
+    });
+    console.log("setup -> device.value ", device.value);
+
+    return { device, setFavorite, isFavorite, color, setColor, setCt, loading };
   },
 };
 </script>

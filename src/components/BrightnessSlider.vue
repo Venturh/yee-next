@@ -1,6 +1,6 @@
 <template>
   <input
-    class="z-10 w-full bg-gray-400 outline-none"
+    class="z-10 bg-gray-400 outline-none"
     :style="{ '--size': size, '--r': color.r, '--g': color.g, '--b': color.b }"
     type="range"
     v-model="brightness"

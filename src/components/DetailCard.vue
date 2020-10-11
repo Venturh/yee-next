@@ -1,6 +1,6 @@
 <template>
   <div class="rounded-xl bg-toolbar">
-    <nav class="flex p-4">
+    <nav class="flex flex-col p-4 md:flex-row">
       <h2
         @click="setSelectedItem(item)"
         v-for="item in navItems"
@@ -11,6 +11,10 @@
         {{ item }}
       </h2>
     </nav>
+    <div class="flex flex-col items-center">
+      <slot v-if="selectedItem === navItems[0]" name="first" />
+      <slot v-if="selectedItem === navItems[1]" name="second" />
+    </div>
   </div>
 </template>
 

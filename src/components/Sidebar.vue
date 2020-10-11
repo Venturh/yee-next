@@ -25,6 +25,7 @@
 
     <div class="flex flex-col items-center w-full ">
       <router-link
+        ref="linksRef"
         v-for="item in menuItems"
         :to="`/${item.text.toLowerCase()}`"
         :key="item.text"
@@ -49,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import Icon from "@/components/Icon.vue";
 
 type MenuItem = {
@@ -89,6 +90,8 @@ export default defineComponent({
     const expanded = ref(true);
     const selected = ref("Dashboard");
 
+    const linksRef = ref<any>(null);
+
     const setExpanded = () => {
       expanded.value = !expanded.value;
     };
@@ -97,7 +100,23 @@ export default defineComponent({
       selected.value = name;
     };
 
-    return { menuItems, expanded, selected, setSelected, setExpanded };
+    onMounted(() => {
+      console.log(
+        "red",
+        linksRef.value.$.vnode.el.offsetTop,
+        linksRef.value.$.vnode.el.offsetHeight,
+        linksRef.value.$.vnode.el.children
+      );
+    });
+
+    return {
+      menuItems,
+      expanded,
+      selected,
+      setSelected,
+      setExpanded,
+      linksRef,
+    };
   },
 });
 </script>

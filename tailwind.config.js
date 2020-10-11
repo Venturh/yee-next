@@ -11,6 +11,7 @@ module.exports = {
       textColor: {
         primary: "#4299E1",
       },
+      height: { "3/4": "75%" },
       minHeight: { "1/4": "25%", "1/2": "50%" },
       borderRadius: { xl: "1rem" },
       inset: {
