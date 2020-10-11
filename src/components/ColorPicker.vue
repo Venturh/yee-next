@@ -100,6 +100,7 @@ export default {
     },
   },
   mounted() {
+    this.handleResize();
     const sliderType = this.colorType === "kelvin" ? "kelvin" : "hue";
     const sliderShape = this.sliderShape ? "circle" : null;
     this.colorPicker = new iro.ColorPicker(this.$refs.picker, {
@@ -130,7 +131,6 @@ export default {
     this.colorPicker.on("input:end", this.onInputEnd);
     this.colorPicker.on("mount", this.onMount);
     window.addEventListener("resize", this.handleResize);
-    this.handleResize();
   },
 
   beforeUnmount() {
