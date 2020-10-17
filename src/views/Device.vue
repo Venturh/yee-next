@@ -72,7 +72,9 @@ export default {
     ColorPicker,
     BrightnessSlider2,
   },
+
   setup() {
+    const route = useRoute();
     const { params } = useRoute();
     const store = useStore();
     const { id } = params;
@@ -107,10 +109,16 @@ export default {
 
     watch(loading, () => {
       device.value = devices.value[0];
-
       color.value = device.value.rgb;
     });
-    console.log("setup -> device.value ", device.value);
+
+    watch(
+      () => route.params,
+      newParams => {
+        device.value =
+          devices.value.find(device => device.id === newParams.id) || {};
+      }
+    );
 
     return { device, setFavorite, isFavorite, color, setColor, setCt, loading };
   },

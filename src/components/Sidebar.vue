@@ -1,13 +1,13 @@
 <template>
   <div
-    class="relative h-screen bg-accent"
+    class="h-screen space-y-12 transition-all duration-300 ease-in-out bg-accent"
     :class="[expanded ? 'w-64' : 'w-16']"
   >
     <div
-      class="flex mt-4"
+      class="flex mt-12 "
       :class="[expanded ? 'justify-between px-2' : 'justify-center']"
     >
-      <p class="text-white" v-if="expanded">Welcome</p>
+      <p class="text-white" v-if="expanded">Welcome Max</p>
       <Icon
         icon="arrow-push-right"
         v-if="!expanded"
@@ -23,99 +23,45 @@
       />
     </div>
 
-    <div class="flex flex-col items-center w-full ">
-      <router-link
-        ref="linksRef"
-        v-for="item in menuItems"
-        :to="`/${item.text.toLowerCase()}`"
-        :key="item.text"
-        @click="setSelected(item.text)"
-        class="relative bottom-0 flex items-center w-full p-2 my-4 rounded-lg cursor-pointer j last:absolute"
-        :class="[
-          selected === item.text ? 'text-primary ' : 'text-white',
-          expanded ? '' : 'justify-center',
-        ]"
-      >
-        <div class="flex ml-4">
-          <span
-            class="absolute left-0 w-1 h-6 rounded-xl bg-primary"
-            v-if="selected === item.text"
+    <div ref="linksRef" class="flex flex-col">
+      <verticle-menu :menuItems="sidebarItems" :expanded="expanded">
+        <template v-slot:dropdown="{ menuItems }">
+          <verticle-menu
+            :menuItems="menuItems"
+            :defaultSelected="-1"
+            :expanded="expanded"
           />
-          <Icon :icon="item.icon" :size="6" />
-          <p class="ml-2 text-lg" v-if="expanded">{{ item.text }}</p>
-        </div>
-      </router-link>
+        </template>
+      </verticle-menu>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import Icon from "@/components/Icon.vue";
-
-type MenuItem = {
-  text: string;
-  icon: string;
-  dropdown: boolean;
-};
+import VerticleMenu from "./VerticleMenu.vue";
 
 export default defineComponent({
   name: "Sidebar",
-  components: { Icon },
+  components: { Icon, VerticleMenu },
+
+  props: {
+    sidebarItems: {
+      type: Array,
+      default: () => [],
+    },
+  },
   setup() {
-    const menuItems: MenuItem[] = [
-      {
-        text: "Dashboard",
-        icon: "home",
-        dropdown: false,
-      },
-      {
-        text: "Devices",
-        icon: "home",
-        dropdown: true,
-      },
-      { text: "Rooms", icon: "rooms", dropdown: true },
-      {
-        text: "Scenes",
-        icon: "scenes",
-        dropdown: false,
-      },
-      {
-        text: "Settings",
-        icon: "settings",
-        dropdown: false,
-      },
-    ];
-
     const expanded = ref(true);
-    const selected = ref("Dashboard");
-
-    const linksRef = ref<any>(null);
 
     const setExpanded = () => {
       expanded.value = !expanded.value;
     };
 
-    const setSelected = (name: string) => {
-      selected.value = name;
-    };
-
-    onMounted(() => {
-      console.log(
-        "red",
-        linksRef.value.$.vnode.el.offsetTop,
-        linksRef.value.$.vnode.el.offsetHeight,
-        linksRef.value.$.vnode.el.children
-      );
-    });
-
     return {
-      menuItems,
       expanded,
-      selected,
-      setSelected,
       setExpanded,
-      linksRef,
     };
   },
 });
