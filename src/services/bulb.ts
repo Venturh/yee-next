@@ -14,6 +14,7 @@ export const onChange = (devices: any, newDevice: any) => {
 };
 
 export const setFavoriteStorage = (device: any, type: string) => {
+   device = device.value
   const json = localStorage.getItem(type) || "[]";
   const storage: any = JSON.parse(json);
   if (storage.length === 0) {

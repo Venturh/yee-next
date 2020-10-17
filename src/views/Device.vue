@@ -85,12 +85,16 @@ export default {
       devices.value.find(device => device.id === id) || {}
     );
     const loading = computed(() => store.state.bulbs.loading);
-
     const color = ref(device.value.rgb || {});
-    const isFavorite =
-      favDevices.value.findIndex(device => device.id === id) !== -1;
+
+    const checkIsFavorite = valId => {
+      return favDevices.value.findIndex(device => device.id === valId) !== -1;
+    };
+
+    const isFavorite = ref(checkIsFavorite(device.value.id));
 
     const setFavorite = () => {
+      isFavorite.value = !isFavorite.value;
       store.dispatch(
         "dashboard/setDevices",
         setFavoriteStorage(device, "favDevices")
@@ -117,6 +121,7 @@ export default {
       newParams => {
         device.value =
           devices.value.find(device => device.id === newParams.id) || {};
+        isFavorite.value = checkIsFavorite(device.value.id);
       }
     );
 

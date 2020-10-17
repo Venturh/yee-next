@@ -11,4 +11,5 @@ module.exports = {
 
     svgRule.use("html-loader").loader("html-loader");
   },
+  transpileDependencies: ["vuex-persist"],
 };
