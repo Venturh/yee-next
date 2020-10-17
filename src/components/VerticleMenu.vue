@@ -6,7 +6,7 @@
         :to="item.route"
         :key="item.text"
         @click="setSelected(index)"
-        class="flex items-center w-full p-2 my-4 rounded-lg cursor-pointer"
+        class="relative bottom-0 flex items-center w-full p-2 my-4 rounded-lg cursor-pointer "
         :class="[
           selected === index ? 'text-primary ' : 'text-white',
           expanded ? '' : 'justify-center',

@@ -49,13 +49,13 @@ export default {
       {
         text: "Dashboard",
         route: "/dashboard",
-        icon: "home",
+        icon: "dashboard",
         dropdown: false,
       },
       {
         text: "Devices",
         route: "/devices",
-        icon: "home",
+        icon: "devices",
         dropdown: true,
       },
       {
