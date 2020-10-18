@@ -1,52 +1,76 @@
 <template>
-  <main class="w-full h-full " v-if="!loading">
+  <main class="h-full space-y-4 " v-if="!loading">
     <div class="flex items-center justify-between ">
       <div>
         <div class="flex items-center ">
-          <h1 class="mr-2">{{ device.name }}</h1>
+          <span class="mr-2 text-3xl">{{ device.name }}</span>
           <favorize @action="setFavorite" :isFavorite="isFavorite" />
         </div>
-        <span class=""
+        <span
           >{{ device.power ? "On" : "Off" }} • {{ device.bright }}% Brightness
         </span>
       </div>
       <power-toggle :device="[device]" bg="toolbar" />
     </div>
     <div
-      class="flex flex-col space-y-6 xxl:h-3/4 xxl:flex-row xxl:justify-between xxl:space-x-4 xxl:space-y-0 "
+      class="flex flex-col w-full space-y-5 h-11/12 lxl:h-3/4 lxl:flex-row lxl:space-y-0 lxl:space-x-8 "
     >
-      <detail-card class="xxl:w-1/2" :navItems="['Color', 'ColorTemp']">
-        <template v-slot:first>
-          <color-picker
-            @action="setColor"
-            colorType="rgb"
-            type="Wheel"
-            :value="color"
-          />
-        </template>
-        <template v-slot:second>
-          <color-picker
-            @action="setCt"
-            name="second"
-            colorType="kelvin"
-            :sliderShape="true"
-            type="Slider"
-            v-model="device.kelvin"
-          />
-        </template>
-      </detail-card>
+      <div class="h-3/4 lxl:h-full lxl:space-y-4 lxl:w-2/4">
+        <detail-card
+          class="h-full lxl:h-11/12"
+          :navItems="['Color', 'ColorTemp']"
+          cardType="Color"
+          @toggle="setShowColorOverlay(!showColorOverlay)"
+        >
+          <template v-slot:first>
+            <color-picker
+              class="self-center"
+              @action="setColor"
+              colorType="rgb"
+              type="Wheel"
+              :value="color"
+            />
+            <color-swatch class="" />
+          </template>
+          <template v-slot:second>
+            <color-picker
+              @action="setCt"
+              name="second"
+              colorType="kelvin"
+              :sliderShape="true"
+              type="Slider"
+              v-model="device.kelvin"
+            />
+          </template>
+        </detail-card>
+        <brightness-slider-2
+          class="hidden w-full lxl:block"
+          size="2.5rem"
+          :device="[device]"
+          :color="device.rgb"
+        />
+      </div>
 
-      <detail-card class="xxl:w-1/2" :navItems="['Scenes']">
+      <brightness-slider-2
+        class=" lxl:hidden"
+        size="4rem"
+        :device="[device]"
+        :color="device.rgb"
+      />
+      <detail-card
+        class=" h-3/4 lxl:h-full lxl:w-1/2"
+        :navItems="['Scenes']"
+        cardType="Scene"
+      >
         <template v-slot:first>
           <h1>Scenes</h1>
         </template>
       </detail-card>
     </div>
-    <brightness-slider-2
-      class="w-1/2"
-      size="2.5rem"
-      :device="[device]"
-      :color="device.rgb"
+    <new-color-overlay
+      v-if="showColorOverlay"
+      class="absolute top-0 right-0 "
+      @back="setShowColorOverlay(!showColorOverlay)"
     />
   </main>
 </template>
@@ -61,8 +85,11 @@ import PowerToggle from "@/components/PowerToggle.vue";
 import DetailCard from "@/components/DetailCard.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 import BrightnessSlider2 from "@/components/BrightnessSlider2.vue";
+import ColorSwatch from "@/components/ColorSwatch.vue";
+import NewColorOverlay from "@/components/Overlays/NewColorOverlay.vue";
 import { Device } from "@/types";
 import { setFavoriteStorage } from "@/services/bulb";
+import { useState } from "@/hooks/useState";
 
 export default {
   components: {
@@ -71,6 +98,8 @@ export default {
     DetailCard,
     ColorPicker,
     BrightnessSlider2,
+    ColorSwatch,
+    NewColorOverlay,
   },
 
   setup() {
@@ -111,11 +140,6 @@ export default {
       store.dispatch("bulbs/setRgb", { bulbs: [device.value], rgb: ct });
     };
 
-    watch(loading, () => {
-      device.value = devices.value[0];
-      color.value = device.value.rgb;
-    });
-
     watch(
       () => route.params,
       newParams => {
@@ -125,7 +149,19 @@ export default {
       }
     );
 
-    return { device, setFavorite, isFavorite, color, setColor, setCt, loading };
+    const [showColorOverlay, setShowColorOverlay] = useState(false);
+
+    return {
+      device,
+      setFavorite,
+      isFavorite,
+      color,
+      setColor,
+      setCt,
+      loading,
+      showColorOverlay,
+      setShowColorOverlay,
+    };
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <input
-    class="z-10 bg-gray-400 rounded-lg outline-none"
+    class="z-10 bg-red-400 rounded-lg outline-none"
     :style="{ '--size': size, '--r': color.r, '--g': color.g, '--b': color.b }"
     type="range"
     v-model="brightness"
@@ -44,7 +44,7 @@ export default defineComponent({
 input[type="range"] {
   appearance: none;
 
-  @apply bg-body;
+  @apply bg-toolbar;
   overflow: hidden;
 }
 input[type="range"]::-webkit-slider-thumb {

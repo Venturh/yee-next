@@ -1,17 +1,22 @@
 <template>
-  <div class="rounded-xl bg-toolbar">
-    <nav class="flex flex-col p-4 md:flex-row">
-      <h2
-        @click="setSelectedItem(item)"
-        v-for="item in navItems"
-        :key="item"
-        class="mr-4 font-bold cursor-pointer"
-        :class="selectedItem === item ? 'text-primary' : 'text-white'"
+  <div class="p-4 rounded-xl bg-toolbar">
+    <nav class="flex justify-between ">
+      <div class="flex space-x-4">
+        <h2
+          @click="setSelectedItem(item)"
+          v-for="item in navItems"
+          :key="item"
+          class="font-bold cursor-pointer"
+          :class="selectedItem === item ? 'text-primary' : 'text-white'"
+        >
+          {{ item }}
+        </h2>
+      </div>
+      <add-button @click="$emit('toggle', cardType)">
+        {{ cardType }}</add-button
       >
-        {{ item }}
-      </h2>
     </nav>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col px-4 h-3/4">
       <slot v-if="selectedItem === navItems[0]" name="first" />
       <slot v-if="selectedItem === navItems[1]" name="second" />
     </div>
@@ -20,11 +25,21 @@
 
 <script lang="ts">
 import { Ref, ref } from "vue";
+
+import AddButton from "./AddButton.vue";
+
 export default {
+  components: {
+    AddButton,
+  },
   props: {
     navItems: {
       type: Array as () => Array<string>,
       default: () => [],
+    },
+    cardType: {
+      type: String,
+      default: "",
     },
   },
   setup(props) {
@@ -32,6 +47,7 @@ export default {
     const setSelectedItem = (item: string) => {
       selectedItem.value = item;
     };
+
     return { selectedItem, setSelectedItem };
   },
 };

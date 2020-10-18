@@ -89,13 +89,15 @@ export default {
     handleResize() {
       const height = document.getElementsByClassName("colorpicker")[0]
         .parentNode.offsetHeight;
+
       const width = document.getElementsByClassName("colorpicker")[0].parentNode
         .offsetWidth;
 
-      if (height >= width) {
-        this.length = height / 2;
+      // console.log("w:", width, "h:", height);
+      if (height < 400) {
+        this.length = height / 1.25;
       } else {
-        this.length = width / 2;
+        this.length = height / 1.5;
       }
     },
   },

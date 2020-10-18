@@ -2,7 +2,7 @@
   <div class="flex">
     <Sidebar :sidebarItems="sidebarItems" />
     <div
-      class="w-screen h-screen px-12 pt-12 text-white bg-body md:px-12 xl:px-24 xxl:px-48"
+      class="w-screen h-screen px-12 py-12 overflow-hidden text-white bg-body md:px-12 xl:px-24 xxl:px-48"
     >
       <router-view />
     </div>
@@ -80,11 +80,9 @@ export default {
 
     const loadedDevices = computed(() => store.state.bulbs.devices);
 
-    const loading = computed(() => store.state.bulbs.loading);
     const dropdownDeviceItems = ref<DropdownItem[]>([]);
 
-    watch(loading, () => {
-      dropdownDeviceItems.value = [];
+    const makeDropdownItems = () => {
       loadedDevices.value.map(item => {
         const obj = {
           text: item.name,
@@ -95,9 +93,11 @@ export default {
         return dropdownDeviceItems.value.push(obj);
       });
       sidebarItems.value[1].dropdownItems = dropdownDeviceItems.value;
-    });
+    };
 
-    return { sidebarItems };
+    makeDropdownItems();
+
+    return { sidebarItems, dropdownDeviceItems, loadedDevices };
   },
 };
 </script>
